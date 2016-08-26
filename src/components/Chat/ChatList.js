@@ -9,7 +9,7 @@ export default class ChatList extends Component {
 
 		for(let key in messages) {
 			let message = (
-				<li key={key}>{messages[key]}</li>
+				<h5 key={key}>{messages[key]}</h5>
 			)
 			messageList.push(message);
 		}

@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import firebase from 'firebase';
 
+import MessageStore from '../../stores/MessageStore';
+import ChatActions from '../../actions/ChatAction';
 import ChatList from './ChatList';
 import ChatForm from './ChatForm';
-
-// let messageRef = firebase.database().ref('messages');
 
 
 export default class ChatPage extends Component {
@@ -12,37 +11,34 @@ export default class ChatPage extends Component {
 		super();
 
 		this.state = {
-			messages: {}
+			messages: MessageStore.get()
 		}
 
-		this.ref = firebase.database().ref('messages');
-		this._createMessage = this._createMessage.bind(this);
+		this._onChange = this._onChange.bind(this);
 	}
 
 	componentDidMount() {
-		this.ref.on('value', snapshot => {
-			this.setState({
-				messages: snapshot.val()
-			})
-		})
+		MessageStore.startListening(this._onChange)
 	}
 
 	componentWillUnmount() {
-		this.ref.off('value');
+		MessageStore.stopListening(this._onChange)
 	}
 
-	_createMessage(message) {
-		this.ref.push(message);
-		// this.setState({
-		// 	messages: this.state.messages.concat(message)
-		// });
+	_onChange() {
+		this.setState({
+			messages: MessageStore.get()
+		});
 	}
 
   render() {
+
+		let { messages } = this.state;
+
     return (
       <div className="container">
 				<ChatForm createMessage={this._createMessage}/>
-				<ChatList messages={this.state.messages}/>
+				<ChatList messages={messages}/>
       </div>
     )
   }

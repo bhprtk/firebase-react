@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import ChatActions from '../../actions/ChatAction';
+
 export default class ChatForm extends Component {
 	constructor() {
 		super();
@@ -21,10 +23,11 @@ export default class ChatForm extends Component {
 		e.preventDefault();
 		let { messageText } = this.state;
 
-		this.props.createMessage(messageText);
+		ChatActions.createMessage(messageText);
 		this.setState({
 			messageText: ''
 		})
+
 	}
 
   render() {
@@ -53,7 +56,7 @@ export default class ChatForm extends Component {
 const styles = {
 	textBox: {
 		height: 50,
-		
+
 	},
 	formStyle: {
 		marginBottom: 20
